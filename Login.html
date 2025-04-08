@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            background: url(guitar.jpg) no-repeat center center fixed;
+            background-size: cover;
+        }
+        .container {
+            background: rgb(221, 197, 146);
+            padding: 150px;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 15px 0;
+            border: 3px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: rgb(34, 34, 117);
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 111%;
+        }
+        button:disabled {
+            background: gray;
+            cursor: not-allowed;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()" id="loginBtn">Log In</button>
+    <p class="error" id="errorMsg"></p>
+    <p class="error" id="countdownMsg"></p>
+</div>
+
+<script>
+    let attempts = 0;
+    const maxAttempts = 3;
+    let lockoutTime = 10; 
+
+    function login() {
+        let username = document.getElementById("username").value;
+        let password = document.getElementById("password").value;
+        let errorMsg = document.getElementById("errorMsg");
+        let countdownMsg = document.getElementById("countdownMsg");
+
+        
+        let correctUsername = "admin123";
+        let correctPassword = "admin123";
+
+        if (username === correctUsername && password === correctPassword) {
+            window.location.href = "Home.html";
+            attempts = 0; 
+            errorMsg.textContent = "";
+        } else {
+            attempts++;
+            errorMsg.textContent = 'Invalid Username of Password. Please try again.';
+        }
+
+        if (attempts >= maxAttempts) {
+            errorMsg.textContent = "";
+            disableLoginButton();
+        }
+    }
+
+    function disableLoginButton() {
+        let loginBtn = document.getElementById("loginBtn");
+        let countdownMsg = document.getElementById("countdownMsg");
+
+        loginBtn.disabled = true;
+        let timeLeft = lockoutTime;
+
+        let timer = setInterval(() => {
+            countdownMsg.textContent = 'To many Failed attempts. Try again in 10 seconds';
+            timeLeft--;
+
+            if (timeLeft < 0) {
+                clearInterval(timer);
+                loginBtn.disabled = false;
+                countdownMsg.textContent = "";
+                attempts = 0; 
+            }
+        }, 1000);
+    }
+</script>
+
+</body>
+</html>
